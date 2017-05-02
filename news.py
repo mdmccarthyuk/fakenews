@@ -1,15 +1,11 @@
 from __future__ import print_function
 from collections import defaultdict
-
-import json
-import os
-import random
+import os,random
 
 print('Loading function')
 
 
 def handler(event, context):
-    configPath = os.environ['LAMBDA_TASK_ROOT']
     headsPath = os.environ['LAMBDA_TASK_ROOT'] + "/heads"
     wordsPath = os.environ['LAMBDA_TASK_ROOT'] + "/words"
     with open(headsPath) as f:
@@ -36,8 +32,8 @@ def handler(event, context):
             news = news + word + " "
 
     htmlOutput = '<HTML><BODY><B>' + news.upper() + '</B></BODY></HTML>'
-    print(htmlOutput)
     return htmlOutput
 
 if __name__ == "__main__":
-    handler("a","b")
+    testOut = handler("a","b")
+    print(testOut)
