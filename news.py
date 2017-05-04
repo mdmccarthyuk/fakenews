@@ -1,39 +1,40 @@
 from __future__ import print_function
 from collections import defaultdict
-import os,random
+import os
+import random
 
 print('Loading function')
 
 
 def handler(event, context):
-    headsPath = os.environ['LAMBDA_TASK_ROOT'] + "/heads"
-    wordsPath = os.environ['LAMBDA_TASK_ROOT'] + "/words"
-    with open(headsPath) as f:
+    heads_path = os.environ['LAMBDA_TASK_ROOT'] + "/heads"
+    words_path = os.environ['LAMBDA_TASK_ROOT'] + "/words"
+    with open(heads_path) as f:
         heads = f.readlines()
         f.close()
-    with open(wordsPath) as f:
+    with open(words_path) as f:
         words = f.readlines()
         f.close()
 
-    wordList = defaultdict(list)
+    word_list = defaultdict(list)
     for word in words:
         elem = word.split('\t')
-        wordList[elem[1].rstrip()].append(elem[0].rstrip())
+        word_list[elem[1].rstrip()].append(elem[0].rstrip())
 
-    headTemplate = heads[random.randint(0,len(heads)-1)]
+    head_template = heads[random.randint(0, len(heads)-1)]
     news = ""
 
-    for word in headTemplate.split():
+    for word in head_template.split():
         if word[:1] == '[':
-            newWordList = wordList[word[1:]]
-            newWord = newWordList[random.randint(0,len(newWordList)-1)]
-            news = news + newWord + " "
+            new_word_list = word_list[word[1:]]
+            new_word = new_word_list[random.randint(0, len(new_word_list)-1)]
+            news = news + new_word + " "
         else:
             news = news + word + " "
 
-    htmlOutput = '<HTML><BODY><B>' + news.upper() + '</B></BODY></HTML>'
-    return htmlOutput
+    html_output = '<HTML><BODY><B>' + news.upper() + '</B></BODY></HTML>'
+    return html_output
 
 if __name__ == "__main__":
-    testOut = handler("a","b")
+    testOut = handler("a", "b")
     print(testOut)
